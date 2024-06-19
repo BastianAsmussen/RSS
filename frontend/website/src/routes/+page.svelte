@@ -2,24 +2,24 @@
 </script>
 
 <svelte:head>
-        <title>Home</title>
-        <meta name="description" content="Svelte demo app" />
+	<title>Home</title>
+	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
 <section>
-        <h1>HOME</h1>
+	<h1>HOME</h1>
 </section>
 
 <style>
-        section {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                flex: 0.6;
-        }
+	section {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		flex: 0.6;
+	}
 
-        h1 {
-                width: 100%;
-        }
+	h1 {
+		width: 100%;
+	}
 </style>
