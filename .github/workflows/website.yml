@@ -27,6 +27,10 @@ jobs:
       run: npm ci
       working-directory: ./frontend/website
 
+    - name: Validate code.
+      run: npm run check && npm run lint
+      working-directory: ./frontend/website
+
     - name: Build website.
       run: npm run build
       working-directory: ./frontend/website
