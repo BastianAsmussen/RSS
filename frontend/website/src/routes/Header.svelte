@@ -1,7 +1,24 @@
 <script>
 	import logo from '$lib/images/svelte-logo.svg';
-	import { Search, Dropdown, DropdownItem, Avatar, Drawer, Button, CloseButton, Sidebar, SidebarGroup, SidebarItem, SidebarWrapper } from 'flowbite-svelte';
-	import { HomeOutline, InfoCircleOutline, ArrowRightToBracketOutline, EditOutline } from 'flowbite-svelte-icons';
+	import {
+		Search,
+		Dropdown,
+		DropdownItem,
+		Avatar,
+		Drawer,
+		Button,
+		CloseButton,
+		Sidebar,
+		SidebarGroup,
+		SidebarItem,
+		SidebarWrapper
+	} from 'flowbite-svelte';
+	import {
+		HomeOutline,
+		InfoCircleOutline,
+		ArrowRightToBracketOutline,
+		EditOutline
+	} from 'flowbite-svelte-icons';
 	import { sineIn } from 'svelte/easing';
 	let hidden2 = true;
 	let transitionParams = {
@@ -9,7 +26,6 @@
 		duration: 200,
 		easing: sineIn
 	};
-
 </script>
 
 <header>
@@ -17,40 +33,56 @@
 		<div class="text-center">
 			<Button on:click={() => (hidden2 = false)}>Menu</Button>
 		</div>
-		<Drawer backdrop={false} transitionType="fly" {transitionParams} bind:hidden={hidden2} id="sidebar2">
+		<Drawer
+			backdrop={false}
+			transitionType="fly"
+			{transitionParams}
+			bind:hidden={hidden2}
+			id="sidebar2"
+		>
 			<div class="flex items-center">
-				<h5 id="drawer-navigation-label-3" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+				<h5
+					id="drawer-navigation-label-3"
+					class="text-base font-semibold uppercase text-gray-500 dark:text-gray-400"
+				>
+					Menu
+				</h5>
 				<CloseButton on:click={() => (hidden2 = true)} class="mb-4 dark:text-white" />
 			</div>
 			<Sidebar>
 				<SidebarWrapper divClass="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
 					<SidebarGroup>
-
 						<SidebarItem label="Home" href="/">
 							<svelte:fragment slot="icon">
-								<HomeOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+								<HomeOutline
+									class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+								/>
 							</svelte:fragment>
 						</SidebarItem>
 
-
-						<SidebarItem label="About" href="/about" >
+						<SidebarItem label="About" href="/about">
 							<svelte:fragment slot="icon">
-								<InfoCircleOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+								<InfoCircleOutline
+									class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+								/>
 							</svelte:fragment>
 						</SidebarItem>
 
 						<SidebarItem label="Sign In" href="/signin">
 							<svelte:fragment slot="icon">
-								<ArrowRightToBracketOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+								<ArrowRightToBracketOutline
+									class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+								/>
 							</svelte:fragment>
 						</SidebarItem>
 
 						<SidebarItem label="Sign Up" href="/signup">
 							<svelte:fragment slot="icon">
-								<EditOutline class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+								<EditOutline
+									class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+								/>
 							</svelte:fragment>
 						</SidebarItem>
-
 					</SidebarGroup>
 				</SidebarWrapper>
 			</Sidebar>
@@ -100,7 +132,6 @@
 		height: 3em;
 	}
 
-
 	nav {
 		display: flex;
 		justify-content: center;
@@ -134,5 +165,4 @@
 		position: relative;
 		height: 100%;
 	}
-
 </style>
