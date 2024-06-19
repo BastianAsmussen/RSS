@@ -1,47 +1,25 @@
 <script>
-	import Counter from './Counter.svelte';
+	import { Card } from 'flowbite-svelte';
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
-
-<section>
-
-	<h1>
-		HOME
-	</h1>
-
-
-</section>
+<div class="space-y-4">
+	<Card href="/" horizontal size="md">
+		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+			Very Real Video
+		</h5>
+		<p class="mb-3 font-normal leading-tight text-gray-700 dark:text-gray-400">
+			Smells real too: Lorem ipsum dolor sit amet, consectetur adipisicing elit. A animi consequatur
+			ea eaque est exercitationem
+		</p>
+	</Card>
+</div>
 
 <style>
-	section {
+	* {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
 	}
 </style>
