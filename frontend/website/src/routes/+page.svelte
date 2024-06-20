@@ -1,7 +1,7 @@
 <script>
 	import { Card, Badge } from 'flowbite-svelte';
 	import { ClockSolid } from 'flowbite-svelte-icons';
-	import "../app.css";
+	import '../app.css';
 	import noImage from '../lib/images/noImage.jpg';
 </script>
 
@@ -17,4 +17,3 @@
 		</Badge>
 	</Card>
 </main>
-

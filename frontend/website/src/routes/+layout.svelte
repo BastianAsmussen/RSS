@@ -11,7 +11,7 @@
 <slot></slot>
 
 <style lang="postcss">
-    :global(body) {
-        @apply bg-white dark:bg-gray-800;
-    }
+	:global(body) {
+		@apply bg-white dark:bg-gray-800;
+	}
 </style>
