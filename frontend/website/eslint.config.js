@@ -12,6 +12,9 @@ export default [
 	prettier,
 	...svelte.configs['flat/prettier'],
 	{
+		rules: {
+			'@typescript-eslint/no-require-imports': 'off'
+		},
 		languageOptions: {
 			globals: {
 				...globals.browser,
