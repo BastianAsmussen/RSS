@@ -4,19 +4,19 @@ const config = {
 		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
 	],
 
-	plugins: [require('flowbite/plugin')],
+	plugins: ['flowbite/plugin'],
 
-	darkMode: 'selector',
+	darkMode: 'class',
 
 	theme: {
 		extend: {
 			colors: {
 				// flowbite-svelte
 				primary: {
-					50: '#FFF5F2',
-					100: '#FFF1EE',
+					50: '#ffffff',
+					100: '#c9ced5',
 					200: '#b2e3ed',
-					300: '#8aa1c8',
+					300: '#acc4ed',
 					400: '#83b8ed',
 					500: '#6bcada',
 					600: '#00d9ff',
