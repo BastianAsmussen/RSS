@@ -1,0 +1,16 @@
+[package]
+name = "video_processor"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.38.0", features = ["full"] }
+anyhow = "1.0.86"
+
+tracing = "0.1.40"
+tracing-subscriber = "0.3.18"
+
+clap = { version = "4.5.7", features = ["derive"] }
+
+video-rs = { version = "0.8", features = ["ndarray"] }
+ndarray = "0.15.6"
