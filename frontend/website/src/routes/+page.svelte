@@ -1,10 +1,11 @@
 <script>
 	import { Card, Badge } from 'flowbite-svelte';
 	import { ClockSolid } from 'flowbite-svelte-icons';
+	import "../app.css";
 	import noImage from '../lib/images/noImage.jpg';
 </script>
 
-<div class="space-y-4">
+<main class="bg-white dark:bg-gray-800">
 	<Card img={noImage} href="/">
 		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
 			Text filler for title of video - wooow
@@ -15,18 +16,5 @@
 			3 days ago
 		</Badge>
 	</Card>
-</div>
+</main>
 
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-</style>
