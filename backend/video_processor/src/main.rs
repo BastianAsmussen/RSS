@@ -1,9 +1,13 @@
-use std::{ops::DivAssign, path::Path};
+mod compressor;
+
+use std::path::Path;
 
 use anyhow::Result;
 use clap::Parser;
-use tracing::info;
-use video_rs::{encode::Settings, Decoder, Encoder, Url};
+use compressor::compress;
+use video_rs::Url;
+
+use tracing::{error, info};
 
 /// Video processor for RSS.
 #[derive(Parser, Debug)]
@@ -14,33 +18,42 @@ struct Args {
     path: String,
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     video_rs::init().expect("Failed to initialize FFmpeg!");
 
     let args = Args::parse();
 
     let source = args.path.parse::<Url>()?;
-    let mut decoder = Decoder::new(source)?;
+    let target_resolutions = [
+        (1920, 1080),
+        (1280, 720),
+        (640, 480),
+        (480, 360),
+        (426, 240),
+        (192, 144),
+    ];
 
-    let (width, height) = decoder.size();
-    info!("Video Resolution: {width}x{height}");
+    let mut tasks = Vec::new();
+    for (width, height) in target_resolutions {
+        let source = source.clone();
+        let handle = tokio::spawn(async move {
+            let destination = format!("video/{width}x{height}.mp4");
+            let destination = Path::new(&destination);
 
-    let settings = Settings::preset_h264_yuv420p(640, 480, false);
-    let mut encoder = Encoder::new(Path::new("low.mp4"), settings)?;
+            compress(source, destination, (width, height))
+        });
 
-    for frame in decoder.decode_iter() {
-        let Ok((time, mut frame)) = frame else {
-            info!("No more frames.");
-            break;
-        };
-
-        frame.div_assign(2);
-
-        encoder.encode(&frame, time)?;
+        tasks.push(((width, height), handle));
     }
 
-    encoder.finish()?;
+    for ((width, height), task) in tasks {
+        match task.await {
+            Ok(_) => info!("Finished generating resolution {width}x{height}."),
+            Err(why) => error!("Failed to generate resolution {width}x{height}: {why}"),
+        }
+    }
 
     Ok(())
 }
