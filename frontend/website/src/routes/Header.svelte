@@ -22,7 +22,7 @@
 
 	let isSignedIn: boolean;
 
-	const unsubscribe = signedIn.subscribe(value => {
+	const unsubscribe = signedIn.subscribe((value) => {
 		isSignedIn = value;
 	});
 
@@ -78,6 +78,7 @@
 		<DropdownItem>Help</DropdownItem>
 		<DropdownItem>Send feedback</DropdownItem>
 		<DropdownDivider />
-		<DropdownItem on:click={handleSignInSignOut}>{isSignedIn ? 'Sign out' : 'Sign in'}</DropdownItem>
+		<DropdownItem on:click={handleSignInSignOut}>{isSignedIn ? 'Sign out' : 'Sign in'}</DropdownItem
+		>
 	</Dropdown>
 </Navbar>

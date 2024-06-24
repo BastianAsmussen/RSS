@@ -8,12 +8,7 @@
 </svelte:head>
 
 <section>
-
-	<h1>
-		HOME
-	</h1>
-
-
+	<h1>HOME</h1>
 </section>
 
 <style>
