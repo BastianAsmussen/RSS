@@ -12,3 +12,4 @@ tracing-subscriber = "0.3.18"
 clap = { version = "4.5.7", features = ["derive"] }
 
 gstreamer = "0.22.6"
+gstreamer-video = "0.22.6"
