@@ -14,7 +14,7 @@
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/kit": "^2.5.17",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.13",
 		"@types/eslint": "^8.56.7",
@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"flowbite-svelte-icons": "^1.6.1"
+		"flowbite-svelte-icons": "^1.6.1",
+		"svelte-routing": "^2.13.0"
 	}
 }

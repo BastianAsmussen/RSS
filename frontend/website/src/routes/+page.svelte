@@ -5,6 +5,15 @@
 	import noImage from '../lib/images/noImage.jpg';
 </script>
 
+<svelte:head>
+	<title>Home</title>
+	<meta name="description" content="Svelte demo app" />
+</svelte:head>
+
+<section>
+	<h1>HOME</h1>
+</section>
+
 <main class="bg-white dark:bg-gray-800">
 	<Card img={noImage} href="/">
 		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
