@@ -1,5 +1,8 @@
 <script>
-	import Counter from './Counter.svelte';
+	import { Card, Badge } from 'flowbite-svelte';
+	import { ClockSolid } from 'flowbite-svelte-icons';
+	import '../app.css';
+	import noImage from '../lib/images/noImage.jpg';
 </script>
 
 <svelte:head>
@@ -11,32 +14,15 @@
 	<h1>HOME</h1>
 </section>
 
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+<main class="bg-white dark:bg-gray-800">
+	<Card img={noImage} href="/">
+		<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+			Text filler for title of video - wooow
+		</h5>
+		<Badge color="dark">Uploader Name</Badge>
+		<Badge color="dark" border>
+			<ClockSolid class="me-1.5 h-2.5 w-2.5" />
+			3 days ago
+		</Badge>
+	</Card>
+</main>

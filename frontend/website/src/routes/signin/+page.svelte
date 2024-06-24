@@ -6,7 +6,7 @@
 	function handleLogin(event: Event): void {
 		event.preventDefault();
 		signedIn.set(true);
-		goto('/'); // Navigate to the home page
+		goto('/');
 	}
 </script>
 
@@ -14,12 +14,22 @@
 	<Card>
 		<form class="flex flex-col space-y-6" on:submit={handleLogin}>
 			<h3 class="text-xl font-medium text-gray-900 dark:text-white">Sign in</h3>
-
-			<FloatingLabelInput style="outlined" id="email" name="email" type="text">
+      
+			<FloatingLabelInput
+				style="outlined"
+				id="floating_outlined"
+				name="floating_outlined"
+				type="text"
+			>
 				Email
 			</FloatingLabelInput>
 
-			<FloatingLabelInput style="outlined" id="password" name="password" type="password">
+			<FloatingLabelInput
+				style="outlined"
+				id="floating_outlined"
+				name="floating_outlined"
+				type="text"
+			>
 				Password
 			</FloatingLabelInput>
 
@@ -32,6 +42,7 @@
 					Forgot password?
 				</a>
 			</div>
+      
 			<Button type="submit" class="w-full">Login</Button>
 			<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
 				Not registered? <a
