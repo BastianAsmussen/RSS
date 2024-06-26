@@ -58,7 +58,7 @@
 	function validatePassword(password: string) {
 		const length = password.length >= 12;
 		const upperLower = /[a-zA-Z]/.test(password);
-		const lettersNumbers = /[a-zA-Z]\d/.test(password)
+		const lettersNumbers = /[a-zA-Z]\d/.test(password);
 		const specialChar = /[!@#?\]]/.test(password) && !/[<>]/.test(password);
 
 		return {
@@ -71,7 +71,9 @@
 	}
 
 	function validateEmail(email: string) {
-		return /^[a-zA-Z\d_+&*-]+(?:\\.[a-zA-Z\d_+&*-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,7}$/.test(email);
+		return /^[a-zA-Z\d_+&*-]+(?:\\.[a-zA-Z\d_+&*-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,7}$/.test(
+			email
+		);
 	}
 
 	function handleCreateAccount(event: Event): void {
