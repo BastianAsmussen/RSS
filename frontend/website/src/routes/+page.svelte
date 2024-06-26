@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
 	import { Card, Badge } from 'flowbite-svelte';
 	import { ClockSolid } from 'flowbite-svelte-icons';
 	import '../app.css';
