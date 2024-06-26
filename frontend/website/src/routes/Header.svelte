@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import {
 		Navbar,
 		NavBrand,
@@ -16,6 +16,27 @@
 	} from 'flowbite-svelte';
 	import { SearchOutline } from 'flowbite-svelte-icons';
 	import logo from '$lib/images/svelte-logo.svg';
+	import { signedIn } from '../store';
+	import { goto } from '$app/navigation';
+	import { onDestroy } from 'svelte';
+
+	let isSignedIn: boolean;
+
+	const unsubscribe = signedIn.subscribe((value) => {
+		isSignedIn = value;
+	});
+
+	onDestroy(() => {
+		unsubscribe();
+	});
+
+	function handleSignInSignOut(): void {
+		if (isSignedIn) {
+			signedIn.set(false);
+		} else {
+			goto('/signin');
+		}
+	}
 </script>
 
 <Navbar>
@@ -43,18 +64,21 @@
 		<Avatar id="avatar-menu" src={logo} />
 	</div>
 	<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-		<DropdownHeader>
-			<span class="block text-sm">Filler Name</span>
-			<span class="block truncate text-sm font-medium">name@Filler.com</span>
-		</DropdownHeader>
-		<DropdownItem>Profile</DropdownItem>
+		{#if isSignedIn}
+			<DropdownHeader>
+				<span class="block text-sm">Filler Name</span>
+				<span class="block truncate text-sm font-medium">name@Filler.com</span>
+			</DropdownHeader>
+			<DropdownItem>Profile</DropdownItem>
+			<DropdownItem>Playlist</DropdownItem>
+		{/if}
 		<DropdownItem>History</DropdownItem>
-		<DropdownItem>Playlist</DropdownItem>
 		<DropdownDivider />
 		<DropdownItem>Settings</DropdownItem>
 		<DropdownItem>Help</DropdownItem>
 		<DropdownItem>Send feedback</DropdownItem>
 		<DropdownDivider />
-		<DropdownItem>Sign out</DropdownItem>
+		<DropdownItem on:click={handleSignInSignOut}>{isSignedIn ? 'Sign out' : 'Sign in'}</DropdownItem
+		>
 	</Dropdown>
 </Navbar>
