@@ -1,59 +1,75 @@
-mod compressor;
-
-use std::path::Path;
+mod video;
 
 use anyhow::Result;
 use clap::Parser;
-use compressor::compress;
-use video_rs::Url;
+use gstreamer::{
+    prelude::{ElementExt, GstObjectExt},
+    ClockTime, MessageView, State,
+};
 
-use tracing::{error, info};
+use tracing::{debug, error, info};
 
 /// Video processor for RSS.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Path to the video file.
+    /// URL to the video.
     #[arg(short, long)]
-    path: String,
+    url: String,
+    // The desired video width.
+    #[arg(long)]
+    width: u32,
+    // The desired video height.
+    #[arg(long)]
+    height: u32,
 }
 
-#[tokio::main]
-async fn main() -> Result<()> {
+fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
-    video_rs::init().expect("Failed to initialize FFmpeg!");
+    gstreamer::init()?;
 
     let args = Args::parse();
 
-    let source = args.path.parse::<Url>()?;
-    let target_resolutions = [
-        (1920, 1080),
-        (1280, 720),
-        (640, 480),
-        (480, 360),
-        (426, 240),
-        (192, 144),
-    ];
+    let pipeline = video::convert(&args.url, (args.width, args.height))?;
+    let bus = pipeline.bus().expect("Failed to get bus!");
+    pipeline.set_state(State::Playing)?;
 
-    let mut tasks = Vec::new();
-    for (width, height) in target_resolutions {
-        let source = source.clone();
-        let handle = tokio::spawn(async move {
-            let destination = format!("video/{width}x{height}.mp4");
-            let destination = Path::new(&destination);
+    for msg in bus.iter_timed(ClockTime::NONE) {
+        match msg.view() {
+            MessageView::Eos(..) => {
+                info!("Finished rescaling video.");
 
-            compress(source, destination, (width, height))
-        });
+                break;
+            }
+            MessageView::Error(err) => {
+                error!(
+                    "Error from {:?}: {} ({:?})",
+                    err.src().map(GstObjectExt::path_string),
+                    err.error(),
+                    err.debug()
+                );
 
-        tasks.push(((width, height), handle));
-    }
+                break;
+            }
+            MessageView::StateChanged(state_changed) => {
+                if !state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
+                    continue;
+                }
 
-    for ((width, height), task) in tasks {
-        match task.await {
-            Ok(_) => info!("Finished generating resolution {width}x{height}."),
-            Err(why) => error!("Failed to generate resolution {width}x{height}: {why}"),
+                debug!(
+                    "State changed! ({:?} -> {:?})",
+                    state_changed.old(),
+                    state_changed.current()
+                );
+            }
+            MessageView::Buffering(buffer) => {
+                debug!("Buffering... ({}%)", buffer.percent());
+            }
+            _ => (),
         }
     }
+
+    pipeline.set_state(State::Null)?;
 
     Ok(())
 }
