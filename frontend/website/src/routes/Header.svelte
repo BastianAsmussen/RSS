@@ -27,6 +27,12 @@
 	import failmark from '$lib/icons/fail.svg';
 
 	let isSignedIn: boolean;
+	let signin = false;
+	let signup = false;
+	let email = '';
+	let password = '';
+	let repeatPassword = '';
+	let checker = false;
 
 	const unsubscribe = signedIn.subscribe((value) => {
 		isSignedIn = value;
@@ -43,12 +49,6 @@
 			signin = true;
 		}
 	}
-
-	let signin = false;
-	let signup = false;
-	let email = '';
-	let password = '';
-	let repeatPassword = '';
 
 	function handleLogin(event: Event): void {
 		event.preventDefault();
@@ -77,12 +77,21 @@
 	function handleCreateAccount(event: Event): void {
 		event.preventDefault();
 		if (validation.all && passwordsMatch && validateEmail(email)) {
-			// Implement account creation logic here
 			console.log('Account created successfully');
 			signedIn.set(true);
-			signup = false;
 		} else {
+			checker = true;
 			console.log('Validation failed');
+		}
+	}
+
+	function swapModal(): void {
+		if (signin) {
+			signin = false;
+			signup = true;
+		} else {
+			signin = true;
+			signup = false;
 		}
 	}
 
@@ -132,7 +141,7 @@
 </Navbar>
 
 <!-- Modal for SignIn & SignUp -->
-<Modal bind:open={signin} size="xs" class="w-full" autoclose outsideclose>
+<Modal bind:open={signin} size="xs" class="w-full" outsideclose>
 	<form class="flex flex-col space-y-6" action="#" on:submit={handleLogin}>
 		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign In</h3>
 		<Label class="space-y-2">
@@ -149,99 +158,102 @@
 		</div>
 		<Button type="submit" class="w-full1" on:click={handleLogin}>Login to your account</Button>
 		<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-			<Button on:click={() => (signup = true)}>Create account</Button>
+			<Button on:click={swapModal}>Create account</Button>
 		</div>
 	</form>
 </Modal>
 
-<Modal bind:open={signup} size="xs" class="w-full" autoclose outsideclose>
+<!-- Sign Up -->
+<Modal bind:open={signup} size="xs" class="w-full" outsideclose>
 	<form class="flex flex-col space-y-6" action="#" on:submit={handleCreateAccount}>
 		<h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Sign Up</h3>
 		<Label class="space-y-2">
 			<FloatingLabelInput style="filled" type="email" required bind:value={email}
 				>Email</FloatingLabelInput
 			>
-			<Helper>
-				<li style="display: flex; align-items: center; margin-top: 4px;">
-					<img
-						src={emailValid ? checkmark : failmark}
-						alt="Checkmark"
-						style="width: 16px; height: 16px; margin-right: 8px;"
-					/>
-					<span>Valid email address</span>
-				</li>
-			</Helper>
+			{#if checker}
+				<Helper>
+					<li style="display: flex; align-items: center; margin-top: 4px;">
+						<img
+							src={emailValid ? checkmark : failmark}
+							alt="Checkmark"
+							style="width: 16px; height: 16px; margin-right: 8px;"
+						/>
+						<span>Valid email address</span>
+					</li>
+				</Helper>
+			{/if}
 		</Label>
 		<Label class="space-y-2">
 			<FloatingLabelInput style="filled" type="password" required bind:value={password}
 				>Password</FloatingLabelInput
 			>
-			<Helper>
-				<div style="display: flex; align-items: center;">
-					<span>Password must meet the following requirements:</span>
-				</div>
-				<ul style="list-style: none; padding: 0; margin: 0;">
-					<li style="display: flex; align-items: center; margin-top: 4px;">
-						<img
-							src={validation.length ? checkmark : failmark}
-							alt="Checkmark"
-							style="width: 16px; height: 16px; margin-right: 8px;"
-						/>
-						<span>At least 12 characters long but 14 or more is better</span>
-					</li>
-					<li style="display: flex; align-items: center; margin-top: 4px;">
-						<img
-							src={validation.upperLower ? checkmark : failmark}
-							alt="Checkmark"
-							style="width: 16px; height: 16px; margin-right: 8px;"
-						/>
-						<span>A mixture of both uppercase and lowercase letters</span>
-					</li>
-					<li style="display: flex; align-items: center; margin-top: 4px;">
-						<img
-							src={validation.lettersNumbers ? checkmark : failmark}
-							alt="Checkmark"
-							style="width: 16px; height: 16px; margin-right: 8px;"
-						/>
-						<span>A mixture of letters and numbers</span>
-					</li>
-					<li style="display: flex; align-items: center; margin-top: 4px;">
-						<img
-							src={validation.specialChar ? checkmark : failmark}
-							alt="Checkmark"
-							style="width: 16px; height: 16px; margin-right: 8px;"
-						/>
-						<span
-							>Inclusion of at least one special character, e.g., ! @ # ? ] - NOT ALLOWED &lt; or
-							&gt;</span
-						>
-					</li>
-				</ul>
-			</Helper>
+			{#if checker}
+				<Helper>
+					<div style="display: flex; align-items: center;">
+						<span>Password must meet the following requirements:</span>
+					</div>
+					<ul style="list-style: none; padding: 0; margin: 0;">
+						<li style="display: flex; align-items: center; margin-top: 4px;">
+							<img
+								src={validation.length ? checkmark : failmark}
+								alt="Checkmark"
+								style="width: 16px; height: 16px; margin-right: 8px;"
+							/>
+							<span>At least 12 characters long but 14 or more is better</span>
+						</li>
+						<li style="display: flex; align-items: center; margin-top: 4px;">
+							<img
+								src={validation.upperLower ? checkmark : failmark}
+								alt="Checkmark"
+								style="width: 16px; height: 16px; margin-right: 8px;"
+							/>
+							<span>A mixture of both uppercase and lowercase letters</span>
+						</li>
+						<li style="display: flex; align-items: center; margin-top: 4px;">
+							<img
+								src={validation.lettersNumbers ? checkmark : failmark}
+								alt="Checkmark"
+								style="width: 16px; height: 16px; margin-right: 8px;"
+							/>
+							<span>A mixture of letters and numbers</span>
+						</li>
+						<li style="display: flex; align-items: center; margin-top: 4px;">
+							<img
+								src={validation.specialChar ? checkmark : failmark}
+								alt="Checkmark"
+								style="width: 16px; height: 16px; margin-right: 8px;"
+							/>
+							<span
+								>Inclusion of at least one special character, e.g., ! @ # ? ] - NOT ALLOWED &lt; or
+								&gt;</span
+							>
+						</li>
+					</ul>
+				</Helper>
+			{/if}
 		</Label>
 		<Label class="space-y-2">
 			<FloatingLabelInput style="filled" type="password" required bind:value={repeatPassword}
 				>Repeat Password</FloatingLabelInput
 			>
-			<Helper>
-				<li style="display: flex; align-items: center; margin-top: 4px;">
-					<img
-						src={passwordsMatch ? checkmark : failmark}
-						alt="Checkmark"
-						style="width: 16px; height: 16px; margin-right: 8px;"
-					/>
-					<span>Password must match.</span>
-				</li>
-			</Helper>
+			{#if checker}
+				<Helper>
+					<li style="display: flex; align-items: center; margin-top: 4px;">
+						<img
+							src={passwordsMatch ? checkmark : failmark}
+							alt="Checkmark"
+							style="width: 16px; height: 16px; margin-right: 8px;"
+						/>
+						<span>Password must match.</span>
+					</li>
+				</Helper>
+			{/if}
 		</Label>
-		<Button
-			type="submit"
-			class="w-full1"
-			on:click={handleCreateAccount}
-			disabled={!validation.all || !passwordsMatch || !emailValid}>Create your account</Button
+		<Button class="w-full1" type="submit" on:click={handleCreateAccount}>Create your account</Button
 		>
 		<div class="text-sm font-medium text-gray-500 dark:text-gray-300">
-			<Button on:click={() => (signin = true)}>Already have an Account?</Button>
+			<Button on:click={swapModal}>Already have an Account?</Button>
 		</div>
 	</form>
 </Modal>
