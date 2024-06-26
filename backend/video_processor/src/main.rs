@@ -20,7 +20,10 @@ fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     gstreamer::init()?;
 
-    let pipeline = video::convert("", (640, 480))?;
+    let pipeline = video::convert(
+        "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm",
+        (192, 144),
+    )?;
     let bus = pipeline.bus().expect("Failed to get bus!");
     pipeline.set_state(State::Playing)?;
 
@@ -34,11 +37,14 @@ fn main() -> Result<()> {
                     err.error(),
                     err.debug()
                 );
+
                 break;
             }
             _ => (),
         }
     }
+
+    pipeline.set_state(State::Null)?;
 
     Ok(())
 }
