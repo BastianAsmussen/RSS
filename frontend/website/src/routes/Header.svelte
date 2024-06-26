@@ -25,6 +25,8 @@
 	import { onDestroy } from 'svelte';
 	import checkmark from '$lib/icons/checkmark.svg';
 	import failmark from '$lib/icons/fail.svg';
+	import { validateEmail } from '$lib/validateEmail';
+	import { validatePassword } from '$lib/validatePassword';
 
 	let isSignedIn: boolean;
 	let signin = false;
@@ -53,27 +55,6 @@
 	function handleLogin(event: Event): void {
 		event.preventDefault();
 		signedIn.set(true);
-	}
-
-	function validatePassword(password: string) {
-		const length = password.length >= 12;
-		const upperLower = /[a-zA-Z]/.test(password);
-		const lettersNumbers = /[a-zA-Z]\d/.test(password);
-		const specialChar = /[!@#?\]]/.test(password) && !/[<>]/.test(password);
-
-		return {
-			length,
-			upperLower,
-			lettersNumbers,
-			specialChar,
-			all: length && upperLower && lettersNumbers && specialChar
-		};
-	}
-
-	function validateEmail(email: string) {
-		return /^[a-zA-Z\d_+&*-]+(?:\\.[a-zA-Z\d_+&*-]+)*@(?:[a-zA-Z\d-]+\.)+[a-zA-Z]{2,7}$/.test(
-			email
-		);
 	}
 
 	function handleCreateAccount(event: Event): void {
@@ -202,7 +183,9 @@
 								alt="Checkmark"
 								style="width: 16px; height: 16px; margin-right: 8px;"
 							/>
-							<span>At least 12 characters long but 14 or more is better</span>
+							<span
+								>At least 8 characters long but 12 or more is better and max 128 characters.</span
+							>
 						</li>
 						<li style="display: flex; align-items: center; margin-top: 4px;">
 							<img
