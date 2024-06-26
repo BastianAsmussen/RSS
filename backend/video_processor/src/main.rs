@@ -7,31 +7,42 @@ use gstreamer::{
     ClockTime, MessageView, State,
 };
 
+use tracing::{debug, error, info};
+
 /// Video processor for RSS.
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    /// Path to the video file.
+    /// URL to the video.
     #[arg(short, long)]
-    path: String,
+    url: String,
+    // The desired video width.
+    #[arg(long)]
+    width: u32,
+    // The desired video height.
+    #[arg(long)]
+    height: u32,
 }
 
 fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     gstreamer::init()?;
 
-    let pipeline = video::convert(
-        "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm",
-        (192, 144),
-    )?;
+    let args = Args::parse();
+
+    let pipeline = video::convert(&args.url, (args.width, args.height))?;
     let bus = pipeline.bus().expect("Failed to get bus!");
     pipeline.set_state(State::Playing)?;
 
     for msg in bus.iter_timed(ClockTime::NONE) {
         match msg.view() {
-            MessageView::Eos(..) => break,
+            MessageView::Eos(..) => {
+                info!("Finished rescaling video.");
+
+                break;
+            }
             MessageView::Error(err) => {
-                println!(
+                error!(
                     "Error from {:?}: {} ({:?})",
                     err.src().map(GstObjectExt::path_string),
                     err.error(),
@@ -39,6 +50,20 @@ fn main() -> Result<()> {
                 );
 
                 break;
+            }
+            MessageView::StateChanged(state_changed) => {
+                if !state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
+                    continue;
+                }
+
+                debug!(
+                    "State changed! ({:?} -> {:?})",
+                    state_changed.old(),
+                    state_changed.current()
+                );
+            }
+            MessageView::Buffering(buffer) => {
+                debug!("Buffering... ({}%)", buffer.percent());
             }
             _ => (),
         }
